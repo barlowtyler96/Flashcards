@@ -15,7 +15,83 @@ internal class DbAccess
     //ask user for answer
     //check if answer was correct
     //prompt user to press enter to go to next card
-    public static void DisplayAllStacks()
+
+    public static List<FlashCardDto> GetCardsFromStack(string stackId)//pass stack id
+    {
+        SqlConnection connection = new SqlConnection(connectionString);
+        connection.Open();
+        var cardsFromStackString =
+            $@"SELECT * FROM Flashcards
+                 WHERE StackId = {stackId}";
+
+        SqlCommand cardsFromStack = new SqlCommand(cardsFromStackString, connection);
+        SqlDataReader reader = cardsFromStack.ExecuteReader();
+
+        var tableData = new List<FlashCardDto>();
+
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+                tableData.Add(
+                    new FlashCardDto
+                    {
+                        Id = reader.GetInt32(0),
+                        Front = reader.GetString(1),
+                        Back = reader.GetString(2),
+                    });
+            }
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("\n\nNo cards found.");
+        }
+        return tableData;
+    }
+
+
+
+    public static void DisplayAllFlashcards()//TODO close connection
+    {
+        SqlConnection connection = new SqlConnection(connectionString);
+        connection.Open();
+        var displayStacksString =
+            $@"SELECT * FROM Flashcards
+                ORDER BY Id";
+
+        SqlCommand displayStacks = new SqlCommand(displayStacksString, connection);
+        SqlDataReader reader = displayStacks.ExecuteReader();
+
+        var tableData = new List<FlashCardDto>();
+
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+                tableData.Add(
+                    new FlashCardDto
+                    {
+                        Id = reader.GetInt32(0),
+                        Front = reader.GetString(1),
+                        Back = reader.GetString(2),
+                    });
+            }
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("\n\nNo cards found.");
+        }
+        ConsoleTableBuilder
+                    .From(tableData)
+                    .ExportAndWriteLine();
+
+    }
+
+
+
+    public static void DisplayAllStacks()//TODO close connection
     {
         SqlConnection connection = new SqlConnection(connectionString);
         connection.Open();
@@ -48,9 +124,5 @@ internal class DbAccess
         ConsoleTableBuilder
                     .From(tableData)
                     .ExportAndWriteLine();
-    }
-    static void Study()
-    {
-        var stackIdInput = Helper.GetStackId();
     }
 }

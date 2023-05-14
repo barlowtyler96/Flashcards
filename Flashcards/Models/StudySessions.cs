@@ -1,7 +1,7 @@
 ﻿
 namespace Flashcards.Models;
 
-internal class StudySession
+internal class StudySessions
 {
     public int Id { get; set; }
 

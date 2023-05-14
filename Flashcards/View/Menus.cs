@@ -1,10 +1,9 @@
 ﻿using Flashcards.Controller;
-
 namespace Flashcards.View;
 
 internal class Menus
 {
-    static void MainMenu()
+    public static void MainMenu()
     {
         Console.Clear();
         var closeApp = false;
@@ -38,7 +37,7 @@ internal class Menus
                     break;
 
                 case "3":
-                    //DbAccess.Study();
+                    StudyCards.Study();
                     break;
 
                 case "4":
@@ -51,7 +50,6 @@ internal class Menus
                     break;
             }
         }
-
     }
 
     private static void FlashcardsMenu()
@@ -143,3 +141,4 @@ internal class Menus
         }
     }
 }
+

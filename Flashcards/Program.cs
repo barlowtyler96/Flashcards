@@ -9,7 +9,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        DbAccess.DisplayAllStacks();
+        DbAccess.DisplayAllFlashcards();
         //var controller = new DbController();
         ////controller.CreateDb();
         //controller.CreateTables();

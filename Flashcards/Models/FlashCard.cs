@@ -12,7 +12,7 @@ internal class FlashCard
     public int StacksId { get; set; }    
 }
 
-internal class FlashCardDto //use this to display tro user without the StackId above
+internal class FlashCardDto //use this to display to user without the StackId above
 {
     public int Id { get; set; }
 
