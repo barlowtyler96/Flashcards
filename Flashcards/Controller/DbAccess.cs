@@ -10,22 +10,18 @@ internal class DbAccess
 {
     private static readonly string? connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
     //Data Source = (localdb)\FlashcardsServer;Initial Catalog = FlashCardsDB
-    //ask user what stack they want to study
-    //displayt first row of that stack without the Back of card
-    //ask user for answer
-    //check if answer was correct
-    //prompt user to press enter to go to next card
-
     public static List<FlashCardDto> GetCardsFromStack(string stackId)//pass stack id
     {
         SqlConnection connection = new SqlConnection(connectionString);
         connection.Open();
+        //for loop through the select and increment id by one each time
         var cardsFromStackString =
-            $@"SELECT * FROM Flashcards
-                 WHERE StackId = {stackId}";
+            $@"SELECT Front, Back  FROM Flashcards
+                 WHERE StacksId = {stackId}";
 
         SqlCommand cardsFromStack = new SqlCommand(cardsFromStackString, connection);
         SqlDataReader reader = cardsFromStack.ExecuteReader();
+
 
         var tableData = new List<FlashCardDto>();
 
@@ -36,9 +32,8 @@ internal class DbAccess
                 tableData.Add(
                     new FlashCardDto
                     {
-                        Id = reader.GetInt32(0),
                         Front = reader.GetString(1),
-                        Back = reader.GetString(2),
+                        Back = "Answer"
                     });
             }
         }
@@ -72,7 +67,7 @@ internal class DbAccess
                 tableData.Add(
                     new FlashCardDto
                     {
-                        Id = reader.GetInt32(0),
+                        //Id = reader.GetInt32(0),
                         Front = reader.GetString(1),
                         Back = reader.GetString(2),
                     });
@@ -86,7 +81,6 @@ internal class DbAccess
         ConsoleTableBuilder
                     .From(tableData)
                     .ExportAndWriteLine();
-
     }
 
 

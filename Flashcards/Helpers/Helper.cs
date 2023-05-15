@@ -5,11 +5,10 @@ namespace Flashcards.Helpers;
 
 internal class Helper
 {
-    internal static string GetStackId()
+    internal static string GetStackId(string message)
     {
         DbAccess.DisplayAllStacks();
-        Console.WriteLine("Enter the ID of the stack you would like to view\n" +
-                           " or type 0 to return to Main Menu");
+        Console.WriteLine(message);
         var idInput = Console.ReadLine();
 
         if (idInput == "0")

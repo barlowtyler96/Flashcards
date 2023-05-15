@@ -14,8 +14,6 @@ internal class FlashCard
 
 internal class FlashCardDto //use this to display to user without the StackId above
 {
-    public int Id { get; set; }
-
     public string? Front { get; set; }
 
     public string? Back { get; set; }
