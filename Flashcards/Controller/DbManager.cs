@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 namespace Flashcards.Controller;
 
-internal class DbController
+internal class DbManager
 {
     private static readonly string? connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
     //create database first

@@ -8,6 +8,7 @@ internal class Stack
     public string? StackName { get; set; }
 }
 
+//maybe delete below
 internal class StackDto
 {
     public string? StackName { get; set; }  

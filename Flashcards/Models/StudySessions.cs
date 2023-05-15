@@ -13,6 +13,7 @@ internal class StudySessions
     public string? StackName { get; set; }
 }
 
+//delete below
 internal class StudySessionDto
 {
     public int Id { get; set; }

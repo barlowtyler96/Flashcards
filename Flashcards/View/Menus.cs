@@ -77,15 +77,15 @@ internal class Menus
                     break;
 
                 case "1":
-                    DbController.InsertFlashcards();
+                    DbManager.InsertFlashcards();
                     break;
 
                 case "2":
-                    DbController.UpdateFlashcards();
+                    DbManager.UpdateFlashcards();
                     break;
 
                 case "3":
-                    DbController.DeleteFlashcards();
+                    DbManager.DeleteFlashcards();
                     break;
 
                 default:
@@ -122,15 +122,15 @@ internal class Menus
                     break;
 
                 case "1":
-                    DbController.InsertStack();
+                    DbManager.InsertStack();
                     break;
 
                 case "2":
-                    DbController.UpdateStack();
+                    DbManager.UpdateStack();
                     break;
 
                 case "3":
-                    DbController.DeleteStack();
+                    DbManager.DeleteStack();
                     break;
 
                 default:
