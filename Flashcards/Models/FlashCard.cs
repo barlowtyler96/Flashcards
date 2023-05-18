@@ -9,10 +9,12 @@ internal class FlashCard
 
     public string? Back { get; set; }
 
-    public int StacksId { get; set; }    
+    public int StacksId { get; set; }
+
+    public string? StackName { get; set; }
 }
 
-internal class FlashCardDto //use this to display to user without the StackId above
+internal class FlashCardDto
 {
     public string? Front { get; set; }
 

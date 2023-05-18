@@ -16,7 +16,7 @@ internal class Menus
             Console.WriteLine("Type 1 to Manage Stacks");
             Console.WriteLine("Type 2 to Manage Flashcards");
             Console.WriteLine("Type 3 to Begin a Study Session");
-            Console.WriteLine("Type 4 to View Study Session Data");
+            Console.WriteLine("Type 4 to View Study Session History");
             Console.WriteLine("================================\n");
 
             var commandInput = Console.ReadLine();
@@ -41,7 +41,10 @@ internal class Menus
                     break;
 
                 case "4":
-                    //DbController.Update();
+                    DbAccess.DisplayAllStacks();
+                    Console.WriteLine("Enter the Id of the Stack sessions you would like to view or press Enter to view all: ");
+                    string? userInput = Console.ReadLine();
+                    DbAccess.ViewSessions(userInput.Trim());
                     break;
 
                 default:
@@ -107,8 +110,8 @@ internal class Menus
             Console.WriteLine("\nWhat would you like to do?\n");
             Console.WriteLine("================================");
             Console.WriteLine("Type 0 to Exit");
-            Console.WriteLine("Type 1 to Insert Stacks");
-            Console.WriteLine("Type 2 to Update Stacks");
+            Console.WriteLine("Type 1 to View all Stacks");
+            Console.WriteLine("Type 2 to Insert Stacks");
             Console.WriteLine("Type 3 to Delete a Stack");
             Console.WriteLine("================================\n");
 
@@ -120,13 +123,12 @@ internal class Menus
                     closeMenu = true;
                     MainMenu();
                     break;
-
                 case "1":
-                    DbManager.InsertStack();
+                    DbAccess.DisplayAllStacks();
                     break;
 
                 case "2":
-                    DbManager.UpdateStack();
+                    DbManager.InsertStack();
                     break;
 
                 case "3":
