@@ -1,7 +1,6 @@
-﻿using ConsoleTableExt;
+﻿using Flashcards.Helpers;
 using Flashcards.Models;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
 
 namespace Flashcards.Controller;
@@ -18,10 +17,10 @@ internal class DbAccess
             //for loop through the select and increment id by one each time
             var cardsFromStackString =
                 $@"SELECT Flashcards.Front, Flashcards.Back
-                 FROM Stacks
-                 JOIN Flashcards
-                 ON Stacks.ID=Flashcards.StacksId
-                 WHERE Stacks.ID = {stackId}";
+                   FROM Stacks
+                   JOIN Flashcards
+                   ON Stacks.ID=Flashcards.StacksId
+                   WHERE Stacks.ID = {stackId}";
 
             using (var readCardsCommand = new SqlCommand(cardsFromStackString, connection))
             {
@@ -59,10 +58,10 @@ internal class DbAccess
             //for loop through the select and increment id by one each time
             var cardsFromStackString =
                 $@"SELECT Stacks.StackName, Stacks.ID, Flashcards.Back
-                 FROM Stacks
-                 JOIN Flashcards
-                 ON Stacks.ID=Flashcards.StacksID
-                 WHERE Stacks.ID = {stackId}";
+                   FROM Stacks
+                   JOIN Flashcards
+                   ON Stacks.ID=Flashcards.StacksID
+                   WHERE Stacks.ID = {stackId}";
 
             using (var cardsFromStack = new SqlCommand(cardsFromStackString, connection))
             {
@@ -81,7 +80,7 @@ internal class DbAccess
                                 StackName = reader.GetString(0),
                                 StacksId = reader.GetInt32(1),
                                 Back = reader.GetString(2)
-                            }); ;
+                            });
                     }
                 }
                 else
@@ -94,72 +93,107 @@ internal class DbAccess
         }
     }
 
-    public static void DisplayAllFlashcards()//TODO close connection
+    public static void DisplayAllFlashcards(string stackId)//TODO close connection
     {
+        string displayFlashcardsString;
         using (var connection = new SqlConnection(connectionString))
         {
-            
-            var displayStacksString =
-                $@"SELECT * FROM Flashcards
-                ORDER BY Id";
+            if (string.IsNullOrEmpty(stackId))
+            {
+                displayFlashcardsString =
+                    $@"SELECT * FROM Flashcards
+                       ORDER BY ID";
+            }
+            else
+            {
+                displayFlashcardsString =// may need to do a join here // add a foreign key stackid into session id that links to Stacks.ID
+                    $@"SELECT * FROM Flashcards
+                       WHERE StacksID = {stackId}";
+            }
 
-            using (SqlCommand displayStacks = new SqlCommand(displayStacksString, connection))
+            using (SqlCommand displayFlashcards = new SqlCommand(displayFlashcardsString, connection))
             {
                 connection.Open();
-                var reader = displayStacks.ExecuteReader();
-                var dataTable = new DataTable();
+                var reader = displayFlashcards.ExecuteReader();
+                var tableData = new List<FlashCard>();
 
                 if (reader.HasRows)
                 {
-                    dataTable.Load(reader);
+                    while (reader.Read())
+                    {
+                        tableData.Add(
+                            new FlashCard
+                            {
+                                Id = reader.GetInt32(0),
+                                Front = reader.GetString(1),
+                                Back = reader.GetString(2),
+                                StacksId = reader.GetInt32(3),
+                                StackName = reader.GetString(4),// todo need to delete flashcard table, reinitialize with data, and add stackname
+                            });
+                    }
                 }
                 else
                 {
                     Console.Clear();
                     Console.WriteLine("\n\nNo cards found.");
                 }
-                ConsoleTableBuilder
-                            .From(dataTable)
-                            .ExportAndWriteLine();
+                Helper.DisplayData(tableData);
             }
         }
     }
 
-    public static void DisplayAllStacks()//TODO close connection
+    public static void DisplayAllStacks(string stackId)
     {
-        using (var connection = new SqlConnection(connectionString))
+        string displayStacksString;
+        using (var connection = new SqlConnection(connectionString)) // create a new method, pass in displayStrings, return tableData
         {
-            var displayStacksString =
-                $@"SELECT * FROM Stacks
-                ORDER BY Id";
+            if (string.IsNullOrEmpty(stackId))
+            {
+                displayStacksString =
+                    $@"SELECT * FROM Stacks
+                       ORDER BY ID";
+            }
+            else
+            {
+                displayStacksString =// may need to do a join here // add a foreign key stackid into session id that links to Stacks.ID
+                    $@"SELECT ID, StackName
+                       FROM Stacks
+                       WHERE ID = '{stackId}'";
+            }
 
             using (var displayStacks = new SqlCommand(displayStacksString, connection))
             {
                 connection.Open();
                 var reader = displayStacks.ExecuteReader();
-                var dataTable = new DataTable();
+                var tableData = new List<Stack>();
 
                 if (reader.HasRows)
                 {
-                    dataTable.Load(reader);
+                    while (reader.Read())
+                    {
+                        tableData.Add(
+                            new Stack
+                            {
+                                Id = reader.GetInt32(0),
+                                StackName = reader.GetString(1),
+                            });
+                    }
                 }
                 else
                 {
                     Console.Clear();
                     Console.WriteLine("\n\nNo stacks found.");
                 }
-                ConsoleTableBuilder
-                            .From(dataTable)
-                            .ExportAndWriteLine();
+                Helper.DisplayData(tableData);
             }
         }
     }
 
-    public static void ViewSessions(string sessionId)// MAY NEED TO CHANGE SESSION STRING SO ITS ACCESSIBLE TO SQLCommand
+    public static void ViewSessions(string stacksId)// MAY NEED TO CHANGE SESSION STRING SO ITS ACCESSIBLE TO SQLCommand
     {
         string displaySessionsString;
         
-        if (string.IsNullOrEmpty(sessionId))
+        if (string.IsNullOrEmpty(stacksId))
         {
             displaySessionsString =
                 $@"SELECT Date, Score, StackName
@@ -170,7 +204,7 @@ internal class DbAccess
             displaySessionsString =// may need to do a join here // add a foreign key stackid into session id that links to Stacks.ID
                 $@"SELECT Date, Score, StackName
                    FROM StudySessions
-                   WHERE ";
+                   WHERE StacksID = '{stacksId}'";
         }
         
         using (var connection = new SqlConnection(connectionString))
@@ -179,20 +213,27 @@ internal class DbAccess
             {
                 connection.Open();
                 var reader = displayStacks.ExecuteReader();
-                var dataTable = new DataTable();
-
+                var tableData = new List<StudySessionDto>();
+                
                 if (reader.HasRows)
                 {
-                    dataTable.Load(reader);
+                    while (reader.Read())
+                    {
+                        tableData.Add(
+                            new StudySessionDto
+                            {
+                                Date = reader.GetDateTime(0), // format date here without time
+                                Score = reader.GetInt32(1), // might need to make dto so that id doesnt display
+                                StackName = reader.GetString(2),
+                            });
+                    }
                 }
                 else
                 {
                     Console.Clear();
                     Console.WriteLine("\n\nNo stacks found.");
                 }
-                ConsoleTableBuilder
-                            .From(dataTable)
-                            .ExportAndWriteLine();
+                Helper.DisplayData(tableData);
             }
         }
     }

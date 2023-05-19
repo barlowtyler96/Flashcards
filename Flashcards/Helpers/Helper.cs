@@ -8,10 +8,29 @@ namespace Flashcards.Helpers;
 
 internal class Helper
 {
-  
+    internal static void DisplayData(List<Stack> tableData)
+    {
+        ConsoleTableBuilder
+            .From(tableData)
+            .ExportAndWriteLine();
+    }
+    internal static void DisplayData(List<StudySessionDto> tableData)
+    {
+        ConsoleTableBuilder
+            .From(tableData)
+            .ExportAndWriteLine();
+    }
+    internal static void DisplayData(List<FlashCard> tableData)
+    {
+        ConsoleTableBuilder
+            .From(tableData)
+            .ExportAndWriteLine();
+    }
+
     internal static string GetStackId(string message)
     {
-        DbAccess.DisplayAllStacks();
+        string stackId = "";
+        DbAccess.DisplayAllStacks(stackId);
         Console.WriteLine(message);
         var idInput = Console.ReadLine();
 

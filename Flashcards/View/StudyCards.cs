@@ -8,8 +8,11 @@ internal class StudyCards
 {
     public static void Study()
     {
-
-        var date = DateOnly.FromDateTime(DateTime.Now);
+        
+        var date = DateTime.Now;
+        
+        Console.WriteLine(date);
+        Console.ReadLine();
         var score = 0;
 
         var stackIdInput = Helper.GetStackId("Enter the Id of the stack you would like to study");
@@ -41,14 +44,8 @@ internal class StudyCards
 
             cardsToStudy.Remove(cardsToStudy[0]);
         }
-        var session = new StudySession
-        {
-            Date = date,
-            Score = score,
-            StackId = stackOfCardsWithAnswers[0].StacksId,
-            StackName = stackOfCardsWithAnswers[0].StackName,
-            
-        };
+        var session = StudySession.CreateStudySession(date, score, stackOfCardsWithAnswers[0].StacksId, stackOfCardsWithAnswers[0].StackName);
+        
         DbManager.InsertSession(session);
     }
 }

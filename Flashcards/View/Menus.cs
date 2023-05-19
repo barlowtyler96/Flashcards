@@ -41,8 +41,9 @@ internal class Menus
                     break;
 
                 case "4":
-                    DbAccess.DisplayAllStacks();
-                    Console.WriteLine("Enter the Id of the Stack sessions you would like to view or press Enter to view all: ");
+                    string stackId = "";
+                    DbAccess.DisplayAllStacks(stackId);
+                    Console.WriteLine("Enter the Stack Id of the  sessions you would like to view or press Enter to view all: ");
                     string? userInput = Console.ReadLine();
                     DbAccess.ViewSessions(userInput.Trim());
                     break;
@@ -124,7 +125,8 @@ internal class Menus
                     MainMenu();
                     break;
                 case "1":
-                    DbAccess.DisplayAllStacks();
+                    string stackId = "";
+                    DbAccess.DisplayAllStacks(stackId);
                     break;
 
                 case "2":

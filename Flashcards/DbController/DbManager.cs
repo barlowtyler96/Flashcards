@@ -1,4 +1,5 @@
-﻿using Flashcards.Models;
+﻿using Flashcards.Helpers;
+using Flashcards.Models;
 using System.Configuration;
 using System.Data.SqlClient;
 namespace Flashcards.Controller;
@@ -32,7 +33,8 @@ internal class DbManager
                     ID INT PRIMARY KEY IDENTITY NOT NULL,
                     Front NVARCHAR(25) NOT NULL,
                     Back NVARCHAR(25) NOT NULL,
-                    StacksID INT FOREIGN KEY REFERENCES Stacks(ID))";
+                    StacksID INT FOREIGN KEY REFERENCES Stacks(ID),
+                    StackName nvarchar(25) NOT NULL)";
 
             using (SqlCommand createFlashcardsTable = new SqlCommand(createFlashcardsString, connection))
             {
@@ -57,12 +59,55 @@ internal class DbManager
 
     internal static void InsertFlashcards()
     {
-        //display all stacks
-        //ask user to enter stack id and use that id as where 
+        var stackId = Helper.GetStackId("Enter the Id of the Stack you want to add to: ");
+
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            Console.WriteLine("Enter the Front of the card: ");
+            var userInputFront = Console.ReadLine().Trim().ToLower();
+
+            Console.WriteLine("Enter the Back of the card: ");
+            var userInputBack = Console.ReadLine().Trim().ToLower();
+
+            var insertStackString =
+                $@"INSERT INTO Flashcards (Front, Back, StacksID)
+                   VALUES ('{userInputFront}', '{userInputBack}', {stackId})";
+
+            using (SqlCommand insertStackCommand = new SqlCommand(insertStackString, connection))
+            {
+                connection.Open();
+                insertStackCommand.ExecuteNonQuery();
+            }
+        }
     }
+
     internal static void UpdateFlashcards()
     {
-        //display flashcards with input id
+        var stackId = Helper.GetStackId("Enter the Id of the Stack you want to update a flashcard in: ");
+        DbAccess.DisplayAllFlashcards(stackId);//fixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        Console.WriteLine("Enter the Id of the flashcard you want to update: ");
+        var flashCardId = Console.ReadLine();
+
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            Console.WriteLine("Enter the Front of the card: ");
+            var userInputFront = Console.ReadLine().Trim().ToLower();
+
+            Console.WriteLine("Enter the Back of the card: ");
+            var userInputBack = Console.ReadLine().Trim().ToLower();
+
+            var insertStackString =
+                $@"UPDATE Flashcards
+                   SET  Front = '{userInputFront}', Back = '{userInputBack}', StacksID = {stackId}
+                   WHERE ID = {flashCardId}";
+
+            using (SqlCommand insertStackCommand = new SqlCommand(insertStackString, connection))
+            {
+                connection.Open();
+                insertStackCommand.ExecuteNonQuery();
+            }
+        }
+
         //ask user to to input id of card they want to delete
     }
     internal static void DeleteFlashcards()
@@ -70,6 +115,7 @@ internal class DbManager
         //display flashcards with input id
         //ask user to input  id of card they want to delete
     }
+
     internal static void InsertStack()
     {
         using (SqlConnection connection = new SqlConnection(connectionString))
@@ -87,6 +133,7 @@ internal class DbManager
             }
         }
     }
+
     internal static void DeleteStack()
     {
         Console.Clear();
@@ -95,7 +142,8 @@ internal class DbManager
             connection.Open();
             var inputConfirmed = false;
             var userInput = "";
-            DbAccess.DisplayAllStacks();
+            var stackid = "";
+            DbAccess.DisplayAllStacks(stackid);
             while (inputConfirmed == false)
             {
                 Console.WriteLine("Enter the Id of the stack you want to delete: ");

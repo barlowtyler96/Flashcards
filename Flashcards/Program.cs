@@ -10,6 +10,5 @@ internal class Program
         //DbManager.CreateDb();
         //DbManager.CreateTables();
         Menus.MainMenu();
-        
     }
 }
