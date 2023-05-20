@@ -23,7 +23,7 @@ internal class StudySession
             Date = date,
             Score = score,
             StackId = stackId,
-            StackName = Helper.GetStackName(stackId.ToString())
+            StackName = DbAccess.RetrieveStackName(stackId.ToString())
         };
         return session;
     }

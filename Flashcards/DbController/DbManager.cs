@@ -59,9 +59,10 @@ internal class DbManager
 
     internal static void InsertFlashcards()
     {
-        var stackId = Helper.GetStackId("Enter the Id of the Stack you want to add to: ");
+        var stackId = Helper.GetStackId("Enter the Id of the Stack you want to add to " +
+                                        "or 0 to return to the Main Menu: ");
         var userInput = Helper.GetFlashcardValues();
-        var stackName = Helper.GetStackName(stackId);
+        var stackName = DbAccess.RetrieveStackName(stackId);
 
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
@@ -77,52 +78,62 @@ internal class DbManager
         }
     }
 
-    internal static void UpdateFlashcards()
+    internal static void UpdateFlashcard()
     {
         var stackId = Helper.GetStackId("Enter the Id of the Stack you want to update a " +
                                         "flashcard in or 0 to return to the Main Menu: ");
-        DbAccess.DisplayAllFlashcards(stackId);
+        var cardExist = DbAccess.DisplayAllFlashcards(stackId);
 
-        Console.WriteLine("Enter the Id of the flashcard you want to update: ");
-        var flashCardId = Console.ReadLine();
-        var userInput = Helper.GetFlashcardValues();
-
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        if (cardExist)
         {
-            var insertStackString =
-                $@"UPDATE Flashcards
+            Console.WriteLine("Enter the Id of the flashcard you want to update: ");
+            var flashCardId = Console.ReadLine();
+            var userInput = Helper.GetFlashcardValues();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                var insertStackString =
+                    $@"UPDATE Flashcards
                    SET  Front = '{userInput.Item1}', Back = '{userInput.Item2}', StacksID = {stackId}
                    WHERE ID = {flashCardId}";
 
-            using (SqlCommand insertStackCommand = new SqlCommand(insertStackString, connection))
-            {
-                connection.Open();
-                insertStackCommand.ExecuteNonQuery();
+                using (SqlCommand insertStackCommand = new SqlCommand(insertStackString, connection))
+                {
+                    connection.Open();
+                    insertStackCommand.ExecuteNonQuery();
+                }
             }
         }
+        else
+            Helper.ContinueMessage();
         Console.Clear();
     }
-    internal static void DeleteFlashcards()
+    internal static void DeleteFlashcard()
     {
         var stackId = Helper.GetStackId("Enter the Id of the Stack you want to delete a " +
                                         "flashcard from or 0 to return to the Main Menu: ");
-        DbAccess.DisplayAllFlashcards(stackId);
+        var cardExists = DbAccess.DisplayAllFlashcards(stackId);
 
-        Console.WriteLine("Enter the Id of the flashcard you want to delete: ");
-        var flashCardId = Console.ReadLine();
-
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        if (cardExists)
         {
-            var deleteFlashcardString =
-                $@"DELETE FROM Flashcards
+            Console.WriteLine("Enter the Id of the flashcard you want to delete: ");
+            var flashCardId = Console.ReadLine();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                var deleteFlashcardString =
+                    $@"DELETE FROM Flashcards
                    WHERE ID = {flashCardId}";
 
-            using (SqlCommand deleteFlashcardCommand = new SqlCommand(deleteFlashcardString, connection))
-            {
-                connection.Open();
-                deleteFlashcardCommand.ExecuteNonQuery();
+                using (SqlCommand deleteFlashcardCommand = new SqlCommand(deleteFlashcardString, connection))
+                {
+                    connection.Open();
+                    deleteFlashcardCommand.ExecuteNonQuery();
+                }
             }
         }
+        else
+            Helper.ContinueMessage();
     }
 
     internal static void InsertStack()
@@ -192,7 +203,7 @@ internal class DbManager
     {
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
-            var stackName = Helper.GetStackName(session.StackId.ToString());
+            var stackName = DbAccess.RetrieveStackName(session.StackId.ToString());
 
             var insertSessionString =
                 $@"INSERT INTO StudySessions (Date, Score, StacksID, StackName)

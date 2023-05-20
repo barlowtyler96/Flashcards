@@ -88,11 +88,11 @@ internal class Menus
                     break;
 
                 case "2":
-                    DbManager.UpdateFlashcards();
+                    DbManager.UpdateFlashcard();
                     break;
 
                 case "3":
-                    DbManager.DeleteFlashcards();
+                    DbManager.DeleteFlashcard();
                     break;
 
                 case "4":

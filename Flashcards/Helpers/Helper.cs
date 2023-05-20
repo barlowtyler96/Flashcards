@@ -13,6 +13,7 @@ internal class Helper
             .From(tableData)
             .WithTitle($"Total Stacks: {tableData.Count}")
             .ExportAndWriteLine();
+        ContinueMessage();
     }
     internal static void DisplayData(List<StudySession> tableData)
     {
@@ -21,16 +22,16 @@ internal class Helper
             .From(tableData)
             .WithTitle($"Entries: {tableData.Count}")
             .ExportAndWriteLine();
-        Console.WriteLine("Press enter to continue...");
-        Console.ReadLine();
-        Console.Clear();
+        ContinueMessage();
     }
     internal static void DisplayData(List<FlashCard> tableData)
     {
+        Console.Clear();
         ConsoleTableBuilder
             .From(tableData)
             .WithTitle($"Total Flashcards: {tableData.Count}")
             .ExportAndWriteLine();
+        ContinueMessage();
     }
 
     internal static void ContinueMessage()
@@ -68,12 +69,6 @@ internal class Helper
         if (idInput == "0")
             Menus.MainMenu();
         return idInput;
-    }
-    internal static string GetStackName(string stackId)
-    {
-        var fromStack = DbAccess.CardsFromStackWithAnswer(stackId);
-        var result = fromStack[0].StackName;
-        return result;
     }
 
     internal static (string, string) GetFlashcardValues()

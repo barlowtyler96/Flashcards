@@ -1,5 +1,4 @@
-﻿
-namespace Flashcards.Models;
+﻿namespace Flashcards.Models;
 
 internal class FlashCard
 {

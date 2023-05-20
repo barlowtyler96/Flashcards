@@ -13,7 +13,7 @@ internal class DbAccess
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            
+
             //for loop through the select and increment id by one each time
             var cardsFromStackString =
                 $@"SELECT Flashcards.Front, Flashcards.Back
@@ -46,7 +46,7 @@ internal class DbAccess
                     Console.WriteLine("\n\nNo cards found.");
                 }
                 return tableData;
-            } 
+            }
         }
     }
 
@@ -54,7 +54,7 @@ internal class DbAccess
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            
+
             //for loop through the select and increment id by one each time
             var cardsFromStackString =
                 $@"SELECT Stacks.StackName, Stacks.ID, Flashcards.Back
@@ -93,8 +93,9 @@ internal class DbAccess
         }
     }
 
-    public static void DisplayAllFlashcards(string stackId)//TODO close connection
+    public static bool DisplayAllFlashcards(string stackId)//TODO close connection
     {
+        bool cardsExist = true;
         string displayFlashcardsString;
         using (var connection = new SqlConnection(connectionString))
         {
@@ -128,7 +129,7 @@ internal class DbAccess
                                 Front = reader.GetString(1),
                                 Back = reader.GetString(2),
                                 StacksId = reader.GetInt32(3),
-                                StackName = reader.GetString(4),// todo need to delete flashcard table, reinitialize with data, and add stackname
+                                StackName = reader.GetString(4),
                             });
                     }
                 }
@@ -136,16 +137,18 @@ internal class DbAccess
                 {
                     Console.Clear();
                     Console.WriteLine("\n\nNo cards found.");
+                    cardsExist = false;
                 }
                 Helper.DisplayData(tableData);
             }
         }
+        return cardsExist;
     }
 
     public static void DisplayAllStacks(string stackId)
     {
         string displayStacksString;
-        using (var connection = new SqlConnection(connectionString)) // create a new method, pass in displayStrings, return tableData
+        using (var connection = new SqlConnection(connectionString)) 
         {
             if (string.IsNullOrEmpty(stackId))
             {
@@ -155,7 +158,7 @@ internal class DbAccess
             }
             else
             {
-                displayStacksString =// may need to do a join here // add a foreign key stackid into session id that links to Stacks.ID
+                displayStacksString =
                     $@"SELECT ID, StackName
                        FROM Stacks
                        WHERE ID = '{stackId}'";
@@ -192,7 +195,7 @@ internal class DbAccess
     public static void ViewSessions(string stacksId)// MAY NEED TO CHANGE SESSION STRING SO ITS ACCESSIBLE TO SQLCommand
     {
         string displaySessionsString;
-        
+
         if (string.IsNullOrEmpty(stacksId))
         {
             displaySessionsString =
@@ -206,7 +209,7 @@ internal class DbAccess
                    FROM StudySessions
                    WHERE StacksID = {stacksId}";
         }
-        
+
         using (var connection = new SqlConnection(connectionString))
         {
             using (var displayStacks = new SqlCommand(displaySessionsString, connection))
@@ -214,7 +217,7 @@ internal class DbAccess
                 connection.Open();
                 var reader = displayStacks.ExecuteReader();
                 var tableData = new List<StudySession>();
-                
+
                 if (reader.HasRows)
                 {
                     while (reader.Read())
@@ -222,8 +225,8 @@ internal class DbAccess
                         tableData.Add(
                             new StudySession
                             {
-                                Date = reader.GetDateTime(0), 
-                                Score = reader.GetInt32(1), 
+                                Date = reader.GetDateTime(0),
+                                Score = reader.GetInt32(1),
                                 StackId = reader.GetInt32(2),
                                 StackName = reader.GetString(3),
                             });
@@ -235,6 +238,47 @@ internal class DbAccess
                     Console.WriteLine("\n\nNo stacks found.");
                 }
                 Helper.DisplayData(tableData);
+            }
+        }
+    }
+
+    internal static string RetrieveStackName(string stackId)
+    {
+        string retrieveStackNameString;
+
+        using (var connection = new SqlConnection(connectionString))
+        {
+
+            //for loop through the select and increment id by one each time
+            retrieveStackNameString =
+                $@"SELECT StackName, ID
+                   FROM Stacks
+                   WHERE ID = {stackId}";
+
+            using (var namesFromStack = new SqlCommand(retrieveStackNameString, connection))
+            {
+                connection.Open();
+                var reader = namesFromStack.ExecuteReader();
+                var tableData = new List<FlashCard>();
+
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        tableData.Add(
+                            new FlashCard
+                            {
+                                StackName = reader.GetString(0),
+                            });
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("\n\nStackName does not exist");//todoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+                }
+                return tableData[0].StackName;
             }
         }
     }
