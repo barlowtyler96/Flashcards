@@ -1,4 +1,7 @@
 ﻿
+using Flashcards.Controller;
+using Flashcards.Helpers;
+
 namespace Flashcards.Models;
 
 internal class StudySession
@@ -12,24 +15,16 @@ internal class StudySession
 
     public string? StackName { get; set; }
 
-    internal static StudySession CreateStudySession(DateTime date, int score, int StackId, string StackName)
+
+    internal static StudySession CreateStudySession(DateTime date, int score, int stackId)
     {
         var session = new StudySession
         {
             Date = date,
             Score = score,
-            StackId = StackId,
-            StackName = StackName,
+            StackId = stackId,
+            StackName = Helper.GetStackName(stackId.ToString())
         };
         return session;
     }
-}
-
-internal class StudySessionDto
-{
-    public DateTime Date { get; set; }
-
-    public int Score { get; set; }
-
-    public string? StackName { get; set; }
 }

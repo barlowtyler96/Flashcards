@@ -50,7 +50,7 @@ internal class DbAccess
         }
     }
 
-    public static List<FlashCard> CardsFromStackAllProperties(string stackId)
+    public static List<FlashCard> CardsFromStackWithAnswer(string stackId)
     {
         using (var connection = new SqlConnection(connectionString))
         {
@@ -196,15 +196,15 @@ internal class DbAccess
         if (string.IsNullOrEmpty(stacksId))
         {
             displaySessionsString =
-                $@"SELECT Date, Score, StackName
+                $@"SELECT Date, Score, StacksID
                    FROM StudySessions";
         }
         else
         {
             displaySessionsString =// may need to do a join here // add a foreign key stackid into session id that links to Stacks.ID
-                $@"SELECT Date, Score, StackName
+                $@"SELECT Date, Score, StacksID, StackName
                    FROM StudySessions
-                   WHERE StacksID = '{stacksId}'";
+                   WHERE StacksID = {stacksId}";
         }
         
         using (var connection = new SqlConnection(connectionString))
@@ -213,18 +213,19 @@ internal class DbAccess
             {
                 connection.Open();
                 var reader = displayStacks.ExecuteReader();
-                var tableData = new List<StudySessionDto>();
+                var tableData = new List<StudySession>();
                 
                 if (reader.HasRows)
                 {
                     while (reader.Read())
                     {
                         tableData.Add(
-                            new StudySessionDto
+                            new StudySession
                             {
-                                Date = reader.GetDateTime(0), // format date here without time
-                                Score = reader.GetInt32(1), // might need to make dto so that id doesnt display
-                                StackName = reader.GetString(2),
+                                Date = reader.GetDateTime(0), 
+                                Score = reader.GetInt32(1), 
+                                StackId = reader.GetInt32(2),
+                                StackName = reader.GetString(3),
                             });
                     }
                 }

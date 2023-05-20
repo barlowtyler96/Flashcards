@@ -1,4 +1,6 @@
 ﻿using Flashcards.Controller;
+using Flashcards.Helpers;
+
 namespace Flashcards.View;
 
 internal class Menus
@@ -11,13 +13,13 @@ internal class Menus
         {
             Console.WriteLine("\n\nMAIN MENU");
             Console.WriteLine("\nWhat would you like to do?\n");
-            Console.WriteLine("================================");
+            Console.WriteLine("====================================");
             Console.WriteLine("Type 0 to Exit");
             Console.WriteLine("Type 1 to Manage Stacks");
             Console.WriteLine("Type 2 to Manage Flashcards");
             Console.WriteLine("Type 3 to Begin a Study Session");
             Console.WriteLine("Type 4 to View Study Session History");
-            Console.WriteLine("================================\n");
+            Console.WriteLine("====================================\n");
 
             var commandInput = Console.ReadLine();
 
@@ -56,7 +58,7 @@ internal class Menus
         }
     }
 
-    private static void FlashcardsMenu()
+    internal static void FlashcardsMenu()
     {
         Console.Clear();
         var closeMenu = false;
@@ -69,6 +71,7 @@ internal class Menus
             Console.WriteLine("Type 1 to Insert Flashcards");
             Console.WriteLine("Type 2 to Update Flashcards");
             Console.WriteLine("Type 3 to Delete a Flashcards");
+            Console.WriteLine("Type 4 to View all Flashcards");
             Console.WriteLine("================================\n");
 
             var commandInput = Console.ReadLine();
@@ -92,6 +95,11 @@ internal class Menus
                     DbManager.DeleteFlashcards();
                     break;
 
+                case "4":
+                    DbAccess.DisplayAllFlashcards("");
+                    Helper.ContinueMessage();
+                    break;
+
                 default:
                     Console.Clear();
                     Console.WriteLine("Invalid input. Review the menu and enter a valid command.");
@@ -101,7 +109,7 @@ internal class Menus
 
     }
 
-    private static void StacksMenu()
+    internal static void StacksMenu()
     {
         Console.Clear();
         var closeMenu = false;
@@ -117,7 +125,7 @@ internal class Menus
             Console.WriteLine("================================\n");
 
             var commandInput = Console.ReadLine();
-
+            Console.Clear();
             switch (commandInput.Trim())
             {
                 case "0":
@@ -127,6 +135,7 @@ internal class Menus
                 case "1":
                     string stackId = "";
                     DbAccess.DisplayAllStacks(stackId);
+                    Helper.ContinueMessage();
                     break;
 
                 case "2":

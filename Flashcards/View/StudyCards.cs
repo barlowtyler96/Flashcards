@@ -18,7 +18,7 @@ internal class StudyCards
         var stackIdInput = Helper.GetStackId("Enter the Id of the stack you would like to study");
         Console.Clear();
         var stackOfCardsWithoutAnswers = DbAccess.CardsFromStackWithoutAnswer(stackIdInput);
-        var stackOfCardsWithAnswers = DbAccess.CardsFromStackAllProperties(stackIdInput);
+        var stackOfCardsWithAnswers = DbAccess.CardsFromStackWithAnswer(stackIdInput);
 
         var cardsToStudy = new List<FlashCardDto>();
 
@@ -44,7 +44,7 @@ internal class StudyCards
 
             cardsToStudy.Remove(cardsToStudy[0]);
         }
-        var session = StudySession.CreateStudySession(date, score, stackOfCardsWithAnswers[0].StacksId, stackOfCardsWithAnswers[0].StackName);
+        var session = StudySession.CreateStudySession(date, score, stackOfCardsWithAnswers[0].StacksId);
         
         DbManager.InsertSession(session);
     }
