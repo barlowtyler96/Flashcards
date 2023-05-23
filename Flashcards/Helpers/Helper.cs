@@ -11,25 +11,23 @@ internal class Helper
     {
         ConsoleTableBuilder
             .From(tableData)
-            .WithTitle($"Total Stacks: {tableData.Count}")
+            .WithTitle($"Stacks: {tableData.Count}")
             .ExportAndWriteLine();
         ContinueMessage();
     }
     internal static void DisplayData(List<StudySession> tableData)
     {
-        Console.Clear();
         ConsoleTableBuilder
             .From(tableData)
             .WithTitle($"Entries: {tableData.Count}")
             .ExportAndWriteLine();
-        ContinueMessage();
     }
     internal static void DisplayData(List<FlashCard> tableData)
     {
         Console.Clear();
         ConsoleTableBuilder
             .From(tableData)
-            .WithTitle($"Total Flashcards: {tableData.Count}")
+            .WithTitle($"Flashcards: {tableData.Count}")
             .ExportAndWriteLine();
         ContinueMessage();
     }

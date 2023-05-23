@@ -137,6 +137,7 @@ internal class DbAccess
                 {
                     Console.Clear();
                     Console.WriteLine("\n\nNo cards found.");
+                    Helper.ContinueMessage();
                     cardsExist = false;
                 }
                 Helper.DisplayData(tableData);
@@ -235,7 +236,7 @@ internal class DbAccess
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("\n\nNo stacks found.");
+                    Console.WriteLine("\n\nNo study sessions found.");
                 }
                 Helper.DisplayData(tableData);
             }

@@ -43,7 +43,7 @@ internal class DbManager
             
             var createStudySessionsString =
                 $@"IF NOT EXISTS (SELECT * FROM sysobjects
-                WHERE name='Flashcards' and xtype='U')
+                WHERE name='StudySessions' and xtype='U')
                     CREATE TABLE StudySessions(
 	                Id INT PRIMARY KEY IDENTITY NOT NULL,
                     StackName NVARCHAR(25) NOT NULL,
@@ -104,8 +104,6 @@ internal class DbManager
                 }
             }
         }
-        else
-            Helper.ContinueMessage();
         Console.Clear();
     }
     internal static void DeleteFlashcard()
@@ -131,9 +129,7 @@ internal class DbManager
                     deleteFlashcardCommand.ExecuteNonQuery();
                 }
             }
-        }
-        else
-            Helper.ContinueMessage();
+        }//todoooooooooooooooooooooooooooooooooooooooo else statement
     }
 
     internal static void InsertStack()
@@ -164,7 +160,6 @@ internal class DbManager
 
     internal static void DeleteStack()
     {
-        Console.Clear();
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();

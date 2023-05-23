@@ -70,7 +70,7 @@ internal class Menus
             Console.WriteLine("Type 0 to Exit");
             Console.WriteLine("Type 1 to Insert Flashcards");
             Console.WriteLine("Type 2 to Update Flashcards");
-            Console.WriteLine("Type 3 to Delete a Flashcards");
+            Console.WriteLine("Type 3 to Delete a Flashcard");
             Console.WriteLine("Type 4 to View all Flashcards");
             Console.WriteLine("================================\n");
 
@@ -97,7 +97,6 @@ internal class Menus
 
                 case "4":
                     DbAccess.DisplayAllFlashcards("");
-                    Helper.ContinueMessage();
                     break;
 
                 default:
@@ -135,7 +134,6 @@ internal class Menus
                 case "1":
                     string stackId = "";
                     DbAccess.DisplayAllStacks(stackId);
-                    Helper.ContinueMessage();
                     break;
 
                 case "2":
