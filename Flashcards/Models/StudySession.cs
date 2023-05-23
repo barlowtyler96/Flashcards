@@ -1,7 +1,4 @@
-﻿
-using Flashcards.Controller;
-using Flashcards.Helpers;
-
+﻿using Flashcards.Controller;
 namespace Flashcards.Models;
 
 internal class StudySession
@@ -14,7 +11,6 @@ internal class StudySession
     public int StackId { get; set; }
 
     public string? StackName { get; set; }
-
 
     internal static StudySession CreateStudySession(DateTime date, int score, int stackId)
     {

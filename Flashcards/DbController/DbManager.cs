@@ -129,7 +129,7 @@ internal class DbManager
                     deleteFlashcardCommand.ExecuteNonQuery();
                 }
             }
-        }//todoooooooooooooooooooooooooooooooooooooooo else statement
+        }
     }
 
     internal static void InsertStack()

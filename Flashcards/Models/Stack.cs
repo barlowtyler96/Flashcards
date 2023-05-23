@@ -1,9 +1,8 @@
-﻿
-namespace Flashcards.Models;
+﻿namespace Flashcards.Models;
 
 internal class Stack
 {
-    public int Id { get; set; } //stackid in flashcards links to this
+    public int Id { get; set; }
 
     public string? StackName { get; set; }
 }

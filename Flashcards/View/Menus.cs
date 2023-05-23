@@ -1,6 +1,4 @@
 ﻿using Flashcards.Controller;
-using Flashcards.Helpers;
-
 namespace Flashcards.View;
 
 internal class Menus
@@ -12,7 +10,7 @@ internal class Menus
         while (closeApp == false)
         {
             Console.WriteLine("\n\nMAIN MENU");
-            Console.WriteLine("\nWhat would you like to do?\n");
+            Console.WriteLine("\nWelcome to the Flashcards app! \n\nWhat would you like to do?\n");
             Console.WriteLine("====================================");
             Console.WriteLine("Type 0 to Exit");
             Console.WriteLine("Type 1 to Manage Stacks");

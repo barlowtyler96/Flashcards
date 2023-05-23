@@ -277,7 +277,7 @@ internal class DbAccess
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("\n\nStackName does not exist");//todoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+                    Console.WriteLine("\n\nStackName does not exist");
                 }
                 return tableData[0].StackName;
             }
