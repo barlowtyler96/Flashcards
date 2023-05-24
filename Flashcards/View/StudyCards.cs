@@ -8,15 +8,12 @@ internal class StudyCards
 {
     public static void Study()
     {
-        
-        var date = DateTime.Now;
-        
         var score = 0;
-
         var stackIdInput = Helper.GetStackId("Enter the Id of the stack you would like to study");
         Console.Clear();
-        var cardsWithoutAnswers = DbAccess.CardsFromStackWithoutAnswer(stackIdInput);
-        var cardsWithAnswers = DbAccess.CardsFromStackWithAnswer(stackIdInput);
+
+        var cardsWithoutAnswers = DbAccess.GetCardsWithoutAnswer(stackIdInput);
+        var cardsWithAnswers = DbAccess.GetCardsWithAnswers(stackIdInput);
 
         var cardsToStudy = new List<FlashCardDto>();
 
@@ -31,6 +28,7 @@ internal class StudyCards
 
             Console.WriteLine("Type your answer and press enter: ");
             var answer = Console.ReadLine();
+
             Console.Clear();
             if (answer.Trim().ToLower() == cardsWithAnswers[i].Back)
             {
@@ -44,7 +42,7 @@ internal class StudyCards
         }
         try
         {
-            var session = StudySession.CreateStudySession(date, score, cardsWithAnswers[0].StacksId);
+            var session = StudySession.CreateStudySession(score, cardsWithAnswers[0].StacksId);
             DbManager.InsertSession(session);
         }
         catch (ArgumentOutOfRangeException) 

@@ -12,11 +12,11 @@ internal class StudySession
 
     public string? StackName { get; set; }
 
-    internal static StudySession CreateStudySession(DateTime date, int score, int stackId)
+    internal static StudySession CreateStudySession(int score, int stackId)
     {
         var session = new StudySession
         {
-            Date = date,
+            Date = DateTime.Now,
             Score = score,
             StackId = stackId,
             StackName = DbAccess.RetrieveStackName(stackId.ToString())

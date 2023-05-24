@@ -9,7 +9,7 @@ internal class DbAccess
 {
     private static readonly string? connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
     //Data Source = (localdb)\FlashcardsServer;Initial Catalog = FlashCardsDB
-    public static List<FlashCardDto> CardsFromStackWithoutAnswer(string stackId)//pass stack id
+    public static List<FlashCardDto> GetCardsWithoutAnswer(string stackId)//pass stack id
     {
         using (var connection = new SqlConnection(connectionString))
         {
@@ -50,7 +50,7 @@ internal class DbAccess
         }
     }
 
-    public static List<FlashCard> CardsFromStackWithAnswer(string stackId)
+    public static List<FlashCard> GetCardsWithAnswers(string stackId)
     {
         using (var connection = new SqlConnection(connectionString))
         {
