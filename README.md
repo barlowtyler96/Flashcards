@@ -1,6 +1,6 @@
 # Flashcards:
 
-## This program was developed using SQL Server, SSMS, and C#. This application can be used to create stacks of flashcards to study. The user is given one side of a card from a stack and must enter the correct answer.
+#### This program was developed using SQL Server, SSMS, and C#. This application can be used to create stacks of flashcards to study. The user is given one side of a card from a stack and must enter the correct answer.
 
 # Given Requirements:
 
