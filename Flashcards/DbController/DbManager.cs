@@ -18,7 +18,7 @@ internal class DbManager
                 $@"IF NOT EXISTS (SELECT * FROM sysobjects
                 WHERE name='Stacks' and xtype='U')
                     CREATE TABLE Stacks(
-	                ID INT PRIMARY KEY IDENTITY NOT NULL,
+	                Id INT PRIMARY KEY IDENTITY NOT NULL,
 	                StackName NVARCHAR(20) NOT NULL UNIQUE)";
 
             using (SqlCommand createStacksTable = new SqlCommand(createStacksString, connection))
@@ -30,7 +30,7 @@ internal class DbManager
                 $@"IF NOT EXISTS (SELECT * FROM sysobjects
                 WHERE name='Flashcards' and xtype='U')
                     CREATE TABLE Flashcards(
-                    ID INT PRIMARY KEY IDENTITY NOT NULL,
+                    Id INT PRIMARY KEY IDENTITY NOT NULL,
                     Front NVARCHAR(25) NOT NULL,
                     Back NVARCHAR(25) NOT NULL,
                     StacksID INT FOREIGN KEY REFERENCES Stacks(ID),
