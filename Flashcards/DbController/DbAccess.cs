@@ -140,7 +140,9 @@ internal class DbAccess
                     Helper.ContinueMessage();
                     cardsExist = false;
                 }
+                Console.Clear();
                 Helper.DisplayData(tableData);
+                Helper.ContinueMessage();
             }
         }
         return cardsExist;

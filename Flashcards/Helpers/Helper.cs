@@ -7,29 +7,12 @@ namespace Flashcards.Helpers;
 
 internal class Helper
 {
-    internal static void DisplayData(List<Stack> tableData)
-    {
-        ConsoleTableBuilder
-            .From(tableData)
-            .WithTitle($"Stacks: {tableData.Count}")
-            .ExportAndWriteLine();
-        ContinueMessage();
-    }
-    internal static void DisplayData(List<StudySession> tableData)
+    internal static void DisplayData<T>(List<T> tableData) where T : class
     {
         ConsoleTableBuilder
             .From(tableData)
             .WithTitle($"Entries: {tableData.Count}")
             .ExportAndWriteLine();
-    }
-    internal static void DisplayData(List<FlashCard> tableData)
-    {
-        Console.Clear();
-        ConsoleTableBuilder
-            .From(tableData)
-            .WithTitle($"Flashcards: {tableData.Count}")
-            .ExportAndWriteLine();
-        ContinueMessage();
     }
 
     internal static void ContinueMessage()
